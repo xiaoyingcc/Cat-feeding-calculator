@@ -30,7 +30,7 @@ body {
 
 h1 {
     text-align: center; font-size: 2rem; font-weight: 700;
-    margin-bottom: 0.4rem; color: #e8853a;
+    margin-bottom: 0.4rem; color: #c26a10;
 }
 
 .subtitle {
@@ -47,7 +47,7 @@ h1 {
 .card:hover {
     box-shadow: 0 8px 40px rgba(0,0,0,0.06), 0 3px 10px rgba(0,0,0,0.03);
 }
-.card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 1.2rem; color: #e8853a; }
+.card h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: 1.2rem; color: #c26a10; }
 
 label { display: block; font-size: 0.82rem; font-weight: 500; margin-bottom: 0.35rem; color: #555; }
 
@@ -86,7 +86,7 @@ input:focus, select:focus {
     background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cellipse cx='20' cy='12' rx='8' ry='9' fill='%23e8853a'/%3E%3Cellipse cx='44' cy='12' rx='8' ry='9' fill='%23e8853a'/%3E%3Cellipse cx='32' cy='38' rx='18' ry='16' fill='%23e8853a'/%3E%3Cellipse cx='22' cy='54' rx='6' ry='5' fill='%23e8853a'/%3E%3Cellipse cx='42' cy='54' rx='6' ry='5' fill='%23e8853a'/%3E%3C/svg%3E") center/20px 20px no-repeat;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2); cursor: pointer;
 }
-.slider-labels { display: flex; justify-content: space-between; font-size: 0.78rem; color: #777; font-weight: 400; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 0.78rem; color: #6b6b6b; font-weight: 400; }
 .slider-value { text-align: center; font-weight: 600; font-size: 0.95rem; color: #444; }
 
 /* Results */
@@ -138,7 +138,7 @@ input:focus, select:focus {
 .btn-secondary:hover { background: #eee; transform: translateY(-1px); }
 .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.78rem; border-radius: 10px; }
 
-.disclaimer { text-align: center; font-size: 0.72rem; color: #777; margin-top: 2rem; line-height: 1.5; font-weight: 300; }
+.disclaimer { text-align: center; font-size: 0.72rem; color: #6b6b6b; margin-top: 2rem; line-height: 1.5; font-weight: 300; }
 
 /* Choice buttons */
 .choice-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
@@ -149,7 +149,7 @@ input:focus, select:focus {
 }
 .choice-btn:hover { border-color: #f0c27b; background: #fef9f3; transform: translateY(-1px); }
 .choice-btn.active {
-    border-color: #e8853a; background: #fef5e7; color: #e8853a;
+    border-color: #e8853a; background: #fef5e7; color: #9e5508;
     font-weight: 600; box-shadow: 0 2px 8px rgba(232,133,58,0.15);
 }
 
@@ -161,7 +161,7 @@ input:focus, select:focus {
     cursor: pointer; transition: all 0.25s; color: #666; font-weight: 400;
 }
 .unit-btn:hover { border-color: #f0c27b; }
-.unit-btn.active { border-color: #e8853a; background: #fef5e7; color: #e8853a; font-weight: 600; }
+.unit-btn.active { border-color: #e8853a; background: #fef5e7; color: #9e5508; font-weight: 600; }
 
 /* Food sections */
 .food-section {
