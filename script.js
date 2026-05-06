@@ -38,7 +38,7 @@ const i18n = {
         disclaimer: '\u26A0\uFE0F This calculator provides estimates only. Please consult your vet before making significant dietary changes.',
         newCat: '+ New Cat',
         sliderTpl: '{wet}% Wet \u2014 {dry}% Dry',
-        calorieTpl: '\u{1F43E} Purr-fect plan! Daily need: {der} kcal (RER: {rer} kcal \u00D7 {mult})',
+        calorieTpl: '<span style="color:#34D399">\u{1F43E}</span> Purr-fect plan! Daily need: {der} kcal (RER: {rer} kcal \u00D7 {mult})',
     },
     zh: {
         title: '\u{1F431} \u732B\u54AA\u5582\u98DF\u8BA1\u7B97\u5668',
@@ -73,7 +73,7 @@ const i18n = {
         disclaimer: '\u26A0\uFE0F \u672C\u8BA1\u7B97\u5668\u4EC5\u4F9B\u53C2\u8003\u3002\u5728\u4E3A\u732B\u54AA\u8FDB\u884C\u91CD\u5927\u996E\u98DF\u8C03\u6574\u524D\uFF0C\u8BF7\u54A8\u8BE2\u517D\u533B\u3002',
         newCat: '+ \u65B0\u5EFA\u732B\u54AA',
         sliderTpl: '{wet}% \u6E7F\u7CAE \u2014 {dry}% \u5E72\u7CAE',
-        calorieTpl: '\u{1F43E} \u5B8C\u7F8E\u98DF\u8C31\uFF01\u6BCF\u65E5\u9700\u6C42\uFF1A{der} kcal\uFF08RER\uFF1A{rer} kcal \u00D7 {mult}\uFF09',
+        calorieTpl: '<span style="color:#34D399">\u{1F43E}</span> \u5B8C\u7F8E\u98DF\u8C31\uFF01\u6BCF\u65E5\u9700\u6C42\uFF1A{der} kcal\uFF08RER\uFF1A{rer} kcal \u00D7 {mult}\uFF09',
     }
 };
 
@@ -139,7 +139,7 @@ function calculate() {
     void wetEl.offsetWidth;
     wetEl.textContent = Math.round(wetGrams) + 'g'; dryEl.textContent = Math.round(dryGrams) + 'g';
     wetEl.classList.add('animating'); dryEl.classList.add('animating');
-    $('calorieInfo').textContent = t('calorieTpl').replace('{der}', Math.round(der)).replace('{rer}', Math.round(rer)).replace('{mult}', multiplier);
+    $('calorieInfo').innerHTML = t('calorieTpl').replace('{der}', Math.round(der)).replace('{rer}', Math.round(rer)).replace('{mult}', multiplier);
 }
 
 // Food Library
