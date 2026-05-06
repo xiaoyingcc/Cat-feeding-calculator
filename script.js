@@ -3,25 +3,11 @@ let currentLifeStage = '1.2';
 let currentWetUnit = '100g';
 let currentDryUnit = '100g';
 
-function showSaveIndicator(nearElement) {
-    let indicator = nearElement.parentElement.querySelector('.save-indicator');
-    if (!indicator) {
-        indicator = document.createElement('span');
-        indicator.className = 'save-indicator';
-        nearElement.parentElement.insertBefore(indicator, nearElement.nextSibling);
-    }
-    indicator.textContent = 'Saving...';
-    indicator.className = 'save-indicator visible saving';
-    setTimeout(() => { indicator.textContent = 'Saved \u2714\uFE0F'; indicator.className = 'save-indicator visible saved'; setTimeout(() => { indicator.className = 'save-indicator'; }, 1500); }, 300);
-}
-
 function selectLifeStage(btn) {
     document.querySelectorAll('#lifeStageGroup .choice-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentLifeStage = btn.dataset.value;
     calculate();
-    autoSaveProfile();
-    showSaveIndicator(btn);
 }
 
 function selectUnit(btn, type) {
@@ -35,14 +21,9 @@ function selectUnit(btn, type) {
     if (val && oldUnit !== newUnit) { input.value = oldUnit === '100g' ? Math.round(val * 10) : Math.round(val / 10); }
     if (type === 'wet') currentWetUnit = newUnit; else currentDryUnit = newUnit;
     calculate();
-    autoSaveProfile();
 }
 
 ['catWeight', 'wetCalories', 'dryCalories', 'ratioSlider'].forEach(id => { $(id).addEventListener('input', calculate); });
-
-['catName', 'catWeight', 'wetFoodName', 'wetCalories', 'dryFoodName', 'dryCalories'].forEach(id => {
-    $(id).addEventListener('blur', function() { autoSaveProfile(); autoSaveFood(id); showSaveIndicator(this); });
-});
 
 function getKcalPerGram(type) {
     const def = type === 'wet' ? 110 : 380;
@@ -70,35 +51,7 @@ function calculate() {
     $('calorieInfo').textContent = 'Daily need: ' + Math.round(der) + ' kcal (RER: ' + Math.round(rer) + ' kcal \u00D7 ' + multiplier + ')';
 }
 
-function autoSaveProfile() {
-    const name = $('catName').value.trim();
-    if (!name) return;
-    const profiles = getProfiles();
-    const data = { name: name, weight: $('catWeight').value, lifeStage: currentLifeStage, wetFoodName: $('wetFoodName').value, wetCalories: $('wetCalories').value, wetUnit: currentWetUnit, dryFoodName: $('dryFoodName').value, dryCalories: $('dryCalories').value, dryUnit: currentDryUnit, active: true };
-    profiles.forEach(p => p.active = false);
-    const idx = profiles.findIndex(p => p.name === name);
-    if (idx >= 0) profiles[idx] = data; else profiles.push(data);
-    saveProfilesData(profiles);
-    renderProfiles();
-}
-
-function autoSaveFood(inputId) {
-    let type = null;
-    if (inputId.startsWith('wet')) type = 'wet'; else if (inputId.startsWith('dry')) type = 'dry';
-    if (!type) return;
-    const name = $(type + 'FoodName').value.trim();
-    const calories = $(type + 'Calories').value;
-    if (!name || !calories) return;
-    const unit = type === 'wet' ? currentWetUnit : currentDryUnit;
-    const lib = getFoodLibrary();
-    const idx = lib.findIndex(f => f.name === name && f.type === type);
-    const entry = { name: name, calories: calories, unit: unit, type: type };
-    if (idx >= 0) lib[idx] = entry; else lib.push(entry);
-    saveFoodLibrary(lib);
-    renderFoodDropdowns();
-    $(type + 'FoodSelect').value = name;
-}
-
+// Food Library
 function getFoodLibrary() { return JSON.parse(localStorage.getItem('catFoodLibrary') || '[]'); }
 function saveFoodLibrary(lib) { localStorage.setItem('catFoodLibrary', JSON.stringify(lib)); }
 
@@ -111,6 +64,21 @@ function renderFoodDropdowns() {
         lib.filter(f => f.type === type).forEach(f => { const opt = document.createElement('option'); opt.value = f.name; opt.textContent = f.name + ' (' + f.calories + ' ' + (f.unit === 'kg' ? 'kcal/kg' : 'kcal/100g') + ')'; sel.appendChild(opt); });
         sel.value = cur || '';
     });
+}
+
+function saveFood(type) {
+    const name = $(type + 'FoodName').value.trim();
+    const calories = $(type + 'Calories').value;
+    const unit = type === 'wet' ? currentWetUnit : currentDryUnit;
+    if (!name) { alert('Please enter a food name.'); return; }
+    if (!calories) { alert('Please enter a calorie value.'); return; }
+    const lib = getFoodLibrary();
+    const idx = lib.findIndex(f => f.name === name && f.type === type);
+    const entry = { name: name, calories: calories, unit: unit, type: type };
+    if (idx >= 0) lib[idx] = entry; else lib.push(entry);
+    saveFoodLibrary(lib);
+    renderFoodDropdowns();
+    $(type + 'FoodSelect').value = name;
 }
 
 function loadFood(type) {
@@ -126,6 +94,7 @@ function loadFood(type) {
     calculate();
 }
 
+// Cat Profiles
 function getProfiles() { return JSON.parse(localStorage.getItem('catProfiles') || '[]'); }
 function saveProfilesData(p) { localStorage.setItem('catProfiles', JSON.stringify(p)); }
 
@@ -144,6 +113,17 @@ function renderProfiles() {
     btn.textContent = '+ New Cat';
     btn.onclick = newProfile;
     bar.appendChild(btn);
+}
+
+function saveProfile() {
+    const profiles = getProfiles();
+    const name = $('catName').value.trim() || 'Unnamed';
+    const data = { name: name, weight: $('catWeight').value, lifeStage: currentLifeStage, wetFoodName: $('wetFoodName').value, wetCalories: $('wetCalories').value, wetUnit: currentWetUnit, dryFoodName: $('dryFoodName').value, dryCalories: $('dryCalories').value, dryUnit: currentDryUnit, active: true };
+    profiles.forEach(p => p.active = false);
+    const idx = profiles.findIndex(p => p.name === name);
+    if (idx >= 0) profiles[idx] = data; else profiles.push(data);
+    saveProfilesData(profiles);
+    renderProfiles();
 }
 
 function handleDelete(event, index) {

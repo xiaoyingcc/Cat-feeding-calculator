@@ -32,6 +32,7 @@
                 <button class="choice-btn" data-value="0.8" onclick="selectLifeStage(this)">⚖️ Overweight</button>
                 <button class="choice-btn" data-value="1.6" onclick="selectLifeStage(this)">🍼 Kitten / Lactating</button>
             </div>
+            <button class="btn btn-primary" onclick="saveProfile()" style="width:100%;">💾 Save Profile</button>
         </div>
 
         <!-- Food Info -->
@@ -53,9 +54,8 @@
                     <button class="unit-btn" data-value="kg" onclick="selectUnit(this,'wet')">kcal/kg</button>
                 </div>
                 <input type="number" id="wetCalories" placeholder="110" step="1" min="1">
+                <button class="btn btn-secondary btn-sm" onclick="saveFood('wet')">💾 Save Food</button>
             </div>
-
-            <!-- Dry Food -->
             <div class="food-section">
                 <h3>🥣 Dry Food</h3>
                 <label>Select Saved Food</label>
@@ -70,8 +70,8 @@
                     <button class="unit-btn" data-value="kg" onclick="selectUnit(this,'dry')">kcal/kg</button>
                 </div>
                 <input type="number" id="dryCalories" placeholder="380" step="1" min="1">
+                <button class="btn btn-secondary btn-sm" onclick="saveFood('dry')">💾 Save Food</button>
             </div>
-        </div>
 
         <!-- Slider & Results -->
         <div class="card">
