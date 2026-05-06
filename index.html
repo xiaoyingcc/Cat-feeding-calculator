@@ -32,7 +32,6 @@
                 <button class="choice-btn" data-value="0.8" onclick="selectLifeStage(this)">⚖️ Overweight</button>
                 <button class="choice-btn" data-value="1.6" onclick="selectLifeStage(this)">🍼 Kitten / Lactating</button>
             </div>
-            <button class="btn btn-primary" onclick="saveProfile()" style="width:100%;">💾 Save Profile</button>
         </div>
 
         <!-- Food Info -->
@@ -46,13 +45,8 @@
                 <select id="wetFoodSelect" onchange="loadFood('wet')">
                     <option value="">— Enter manually —</option>
                 </select>
-                <div class="food-name-row">
-                    <div>
-                        <label>Food Name</label>
-                        <input type="text" id="wetFoodName" placeholder="e.g. K9 Chicken Can">
-                    </div>
-                    <button class="btn btn-secondary btn-sm" onclick="saveFood('wet')">💾 Save</button>
-                </div>
+                <label>Food Name</label>
+                <input type="text" id="wetFoodName" placeholder="e.g. K9 Chicken Can">
                 <label>Calories</label>
                 <div class="unit-toggle" id="wetUnitGroup">
                     <button class="unit-btn active" data-value="100g" onclick="selectUnit(this,'wet')">kcal/100g</button>
@@ -68,13 +62,8 @@
                 <select id="dryFoodSelect" onchange="loadFood('dry')">
                     <option value="">— Enter manually —</option>
                 </select>
-                <div class="food-name-row">
-                    <div>
-                        <label>Food Name</label>
-                        <input type="text" id="dryFoodName" placeholder="e.g. Farmina Adult">
-                    </div>
-                    <button class="btn btn-secondary btn-sm" onclick="saveFood('dry')">💾 Save</button>
-                </div>
+                <label>Food Name</label>
+                <input type="text" id="dryFoodName" placeholder="e.g. Farmina Adult">
                 <label>Calories</label>
                 <div class="unit-toggle" id="dryUnitGroup">
                     <button class="unit-btn active" data-value="100g" onclick="selectUnit(this,'dry')">kcal/100g</button>
