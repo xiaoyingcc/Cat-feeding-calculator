@@ -7,97 +7,101 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('zh')">中文</button>
+    </div>
     <div class="container">
-        <h1>🐱 Cat Feeding Calculator</h1>
-        <p class="subtitle">Calculate the perfect daily portions for your cat</p>
+        <h1 data-i18n="title">🐱 Cat Feeding Calculator</h1>
+        <p class="subtitle" data-i18n="subtitle">Calculate the perfect daily portions for your cat</p>
 
         <!-- Profiles -->
         <div class="card">
-            <h2>🐾 Cat Profiles</h2>
+            <h2 data-i18n="catProfiles">🐾 Cat Profiles</h2>
             <div class="profiles-bar" id="profilesBar"></div>
             <div class="row">
                 <div>
-                    <label>Cat's Name</label>
-                    <input type="text" id="catName" placeholder="e.g. BaiBai">
+                    <label data-i18n="catName">Cat's Name</label>
+                    <input type="text" id="catName" data-i18n-placeholder="catNamePh" placeholder="e.g. BaiBai">
                 </div>
                 <div>
-                    <label>Weight (kg)</label>
+                    <label data-i18n="weight">Weight (kg)</label>
                     <input type="number" id="catWeight" placeholder="e.g. 4.5" step="0.1" min="0.1">
                 </div>
             </div>
-            <label>Life Stage</label>
+            <label data-i18n="lifeStage">Life Stage</label>
             <div class="choice-group" id="lifeStageGroup">
-                <button class="choice-btn active" data-value="1.2" onclick="selectLifeStage(this)">🏠 Neutered / Indoor</button>
-                <button class="choice-btn" data-value="1.4" onclick="selectLifeStage(this)">🌳 Active / Outdoor</button>
-                <button class="choice-btn" data-value="0.8" onclick="selectLifeStage(this)">⚖️ Overweight</button>
-                <button class="choice-btn" data-value="1.6" onclick="selectLifeStage(this)">🍼 Kitten / Lactating</button>
+                <button class="choice-btn active" data-value="1.2" onclick="selectLifeStage(this)" data-i18n="neutered">🏠 Neutered / Indoor</button>
+                <button class="choice-btn" data-value="1.4" onclick="selectLifeStage(this)" data-i18n="active">🌳 Active / Outdoor</button>
+                <button class="choice-btn" data-value="0.8" onclick="selectLifeStage(this)" data-i18n="overweight">⚖️ Overweight</button>
+                <button class="choice-btn" data-value="1.6" onclick="selectLifeStage(this)" data-i18n="kitten">🍼 Kitten / Lactating</button>
             </div>
-            <button class="btn btn-primary" onclick="saveProfile()" style="width:100%;">💾 Save Profile</button>
+            <button class="btn btn-primary" onclick="saveProfile()" style="width:100%;" data-i18n="saveProfile">💾 Save Profile</button>
         </div>
 
         <!-- Food Info -->
         <div class="card">
-            <h2>🍽️ Food Calorie Info</h2>
+            <h2 data-i18n="foodCalorieInfo">🍽️ Food Calorie Info</h2>
 
             <!-- Wet Food -->
             <div class="food-section">
-                <h3>🥫 Wet Food</h3>
-                <label>Select Saved Food</label>
+                <h3 data-i18n="wetFood">🥫 Wet Food</h3>
+                <label data-i18n="selectSaved">Select Saved Food</label>
                 <select id="wetFoodSelect" onchange="loadFood('wet')">
-                    <option value="">— Enter manually —</option>
+                    <option value="" data-i18n="enterManually">— Enter manually —</option>
                 </select>
-                <label>Food Name</label>
-                <input type="text" id="wetFoodName" placeholder="e.g. K9 Chicken Can">
-                <label>Calories</label>
+                <label data-i18n="foodName">Food Name</label>
+                <input type="text" id="wetFoodName" data-i18n-placeholder="wetFoodPh" placeholder="e.g. K9 Chicken Can">
+                <label data-i18n="calories">Calories</label>
                 <div class="unit-toggle" id="wetUnitGroup">
                     <button class="unit-btn active" data-value="100g" onclick="selectUnit(this,'wet')">kcal/100g</button>
                     <button class="unit-btn" data-value="kg" onclick="selectUnit(this,'wet')">kcal/kg</button>
                 </div>
                 <input type="number" id="wetCalories" placeholder="110" step="1" min="1">
-                <button class="btn btn-secondary btn-sm" onclick="saveFood('wet')">💾 Save Food</button>
+                <button class="btn btn-secondary btn-sm" onclick="saveFood('wet')" data-i18n="saveFood">💾 Save Food</button>
             </div>
             <div class="food-section">
-                <h3>🥣 Dry Food</h3>
-                <label>Select Saved Food</label>
+                <h3 data-i18n="dryFood">🥣 Dry Food</h3>
+                <label data-i18n="selectSaved">Select Saved Food</label>
                 <select id="dryFoodSelect" onchange="loadFood('dry')">
-                    <option value="">— Enter manually —</option>
+                    <option value="" data-i18n="enterManually">— Enter manually —</option>
                 </select>
-                <label>Food Name</label>
-                <input type="text" id="dryFoodName" placeholder="e.g. Farmina Adult">
-                <label>Calories</label>
+                <label data-i18n="foodName">Food Name</label>
+                <input type="text" id="dryFoodName" data-i18n-placeholder="dryFoodPh" placeholder="e.g. Farmina Adult">
+                <label data-i18n="calories">Calories</label>
                 <div class="unit-toggle" id="dryUnitGroup">
                     <button class="unit-btn active" data-value="100g" onclick="selectUnit(this,'dry')">kcal/100g</button>
                     <button class="unit-btn" data-value="kg" onclick="selectUnit(this,'dry')">kcal/kg</button>
                 </div>
                 <input type="number" id="dryCalories" placeholder="380" step="1" min="1">
-                <button class="btn btn-secondary btn-sm" onclick="saveFood('dry')">💾 Save Food</button>
+                <button class="btn btn-secondary btn-sm" onclick="saveFood('dry')" data-i18n="saveFood">💾 Save Food</button>
             </div>
 
         <!-- Slider & Results -->
         <div class="card">
-            <h2>⚖️ Wet / Dry Ratio</h2>
+            <h2 data-i18n="ratio">⚖️ Wet / Dry Ratio</h2>
             <div class="slider-container">
                 <div class="slider-value" id="sliderValue">50% Wet — 50% Dry</div>
                 <input type="range" id="ratioSlider" min="0" max="100" value="50">
                 <div class="slider-labels">
-                    <span>100% Dry</span>
-                    <span>100% Wet</span>
+                    <span data-i18n="allDry">100% Dry</span>
+                    <span data-i18n="allWet">100% Wet</span>
                 </div>
             </div>
-            <div class="calorie-info" id="calorieInfo">Enter weight to see results</div>
+            <div class="calorie-info" id="calorieInfo" data-i18n="enterWeight">Enter weight to see results</div>
             <div class="results">
                 <div class="result-box wet">
                     <div class="amount" id="wetGrams">—</div>
-                    <div class="label">grams wet food</div>
+                    <div class="label" data-i18n="gramsWet">grams wet food</div>
                 </div>
                 <div class="result-box dry">
                     <div class="amount" id="dryGrams">—</div>
-                    <div class="label">grams dry food</div>
+                    <div class="label" data-i18n="gramsDry">grams dry food</div>
                 </div>
             </div>
         </div>
 
-        <p class="disclaimer">⚠️ This calculator provides estimates only. Please consult your veterinarian before starting any weight loss program or making significant dietary changes for your cat.</p>
+        <p class="disclaimer" data-i18n="disclaimer">⚠️ This calculator provides estimates only. Please consult your veterinarian before starting any weight loss program or making significant dietary changes for your cat.</p>
     </div>
 
     <script src="script.js"></script>

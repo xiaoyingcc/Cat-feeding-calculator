@@ -2,6 +2,95 @@ const $ = id => document.getElementById(id);
 let currentLifeStage = '1.2';
 let currentWetUnit = '100g';
 let currentDryUnit = '100g';
+let currentLang = localStorage.getItem('catCalcLang') || 'en';
+
+const i18n = {
+    en: {
+        title: '🐱 Cat Feeding Calculator',
+        subtitle: 'Calculate the perfect daily portions for your cat',
+        catProfiles: '🐾 Cat Profiles',
+        catName: "Cat's Name",
+        catNamePh: 'e.g. BaiBai',
+        weight: 'Weight (kg)',
+        lifeStage: 'Life Stage',
+        neutered: '🏠 Neutered / Indoor',
+        active: '🌳 Active / Outdoor',
+        overweight: '⚖️ Overweight',
+        kitten: '🍼 Kitten / Lactating',
+        saveProfile: '💾 Save Profile',
+        foodCalorieInfo: '🍽️ Food Calorie Info',
+        wetFood: '🥫 Wet Food',
+        dryFood: '🥣 Dry Food',
+        selectSaved: 'Select Saved Food',
+        enterManually: '— Enter manually —',
+        foodName: 'Food Name',
+        wetFoodPh: 'e.g. K9 Chicken Can',
+        dryFoodPh: 'e.g. Farmina Adult',
+        calories: 'Calories',
+        saveFood: '💾 Save Food',
+        ratio: '⚖️ Wet / Dry Ratio',
+        allDry: '100% Dry',
+        allWet: '100% Wet',
+        enterWeight: 'Enter weight to see results',
+        gramsWet: 'grams wet food',
+        gramsDry: 'grams dry food',
+        disclaimer: '⚠️ This calculator provides estimates only. Please consult your veterinarian.',
+        newCat: '+ New Cat',
+        sliderTpl: '{wet}% Wet — {dry}% Dry',
+        calorieTpl: 'Daily need: {der} kcal (RER: {rer} kcal × {mult})',
+    },
+    zh: {
+        title: '🐱 猫咪喂食计算器',
+        subtitle: '计算猫咪每日最佳喂食量',
+        catProfiles: '🐾 猫咪档案',
+        catName: '猫咪名字',
+        catNamePh: '例如：白白',
+        weight: '体重 (kg)',
+        lifeStage: '生命阶段',
+        neutered: '🏠 绝育/室内猫',
+        active: '🌳 活跃/户外猫',
+        overweight: '⚖️ 超重',
+        kitten: '🍼 幼猫/哺乳期',
+        saveProfile: '💾 保存档案',
+        foodCalorieInfo: '🍽️ 食物热量信息',
+        wetFood: '🥫 湿粮',
+        dryFood: '🥣 干粮',
+        selectSaved: '选择已保存食物',
+        enterManually: '— 手动输入 —',
+        foodName: '食物名称',
+        wetFoodPh: '例如：K9鸡肉罐头',
+        dryFoodPh: '例如：法米纳成猫粮',
+        calories: '热量',
+        saveFood: '💾 保存食物',
+        ratio: '⚖️ 湿粮/干粮比例',
+        allDry: '100% 干粮',
+        allWet: '100% 湿粮',
+        enterWeight: '输入体重查看结果',
+        gramsWet: '克 湿粮',
+        gramsDry: '克 干粮',
+        disclaimer: '⚠️ 本计算器仅供参考。在为猫咪进行重大饮食调整前，请咨询兽医。',
+        newCat: '+ 新建猫咪',
+        sliderTpl: '{wet}% 湿粮 — {dry}% 干粮',
+        calorieTpl: '每日需求：{der} kcal（RER：{rer} kcal × {mult}）',
+    }
+};
+
+function t(key) { return i18n[currentLang][key] || i18n.en[key] || key; }
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('catCalcLang', lang);
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === (lang === 'en' ? 'EN' : '中文')));
+    applyI18n();
+    calculate();
+    renderProfiles();
+    renderFoodDropdowns();
+}
+
+function applyI18n() {
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+}
 
 function selectLifeStage(btn) {
     document.querySelectorAll('#lifeStageGroup .choice-btn').forEach(b => b.classList.remove('active'));
@@ -37,8 +126,8 @@ function calculate() {
     const multiplier = parseFloat(currentLifeStage);
     const wetRatio = parseInt($('ratioSlider').value) / 100;
     const dryRatio = 1 - wetRatio;
-    $('sliderValue').textContent = Math.round(wetRatio*100) + '% Wet \u2014 ' + Math.round(dryRatio*100) + '% Dry';
-    if (!weight || weight <= 0) { $('wetGrams').textContent = '\u2014'; $('dryGrams').textContent = '\u2014'; $('calorieInfo').textContent = 'Enter weight to see results'; return; }
+    $('sliderValue').textContent = t('sliderTpl').replace('{wet}', Math.round(wetRatio*100)).replace('{dry}', Math.round(dryRatio*100));
+    if (!weight || weight <= 0) { $('wetGrams').textContent = '—'; $('dryGrams').textContent = '—'; $('calorieInfo').textContent = t('enterWeight'); return; }
     const rer = 70 * Math.pow(weight, 0.75);
     const der = rer * multiplier;
     const wetGrams = wetRatio > 0 ? (der * wetRatio) / getKcalPerGram('wet') : 0;
@@ -48,7 +137,7 @@ function calculate() {
     void wetEl.offsetWidth;
     wetEl.textContent = Math.round(wetGrams) + 'g'; dryEl.textContent = Math.round(dryGrams) + 'g';
     wetEl.classList.add('animating'); dryEl.classList.add('animating');
-    $('calorieInfo').textContent = 'Daily need: ' + Math.round(der) + ' kcal (RER: ' + Math.round(rer) + ' kcal \u00D7 ' + multiplier + ')';
+    $('calorieInfo').textContent = t('calorieTpl').replace('{der}', Math.round(der)).replace('{rer}', Math.round(rer)).replace('{mult}', multiplier);
 }
 
 // Food Library
@@ -60,7 +149,7 @@ function renderFoodDropdowns() {
     ['wet', 'dry'].forEach(type => {
         const sel = $(type + 'FoodSelect');
         const cur = sel.value;
-        sel.innerHTML = '<option value="">\u2014 Enter manually \u2014</option>';
+        sel.innerHTML = '<option value="">' + t('enterManually') + '</option>';
         lib.filter(f => f.type === type).forEach(f => { const opt = document.createElement('option'); opt.value = f.name; opt.textContent = f.name + ' (' + f.calories + ' ' + (f.unit === 'kg' ? 'kcal/kg' : 'kcal/100g') + ')'; sel.appendChild(opt); });
         sel.value = cur || '';
     });
@@ -74,7 +163,7 @@ function saveFood(type) {
     if (!calories) { alert('Please enter a calorie value.'); return; }
     const lib = getFoodLibrary();
     const idx = lib.findIndex(f => f.name === name && f.type === type);
-    const entry = { name: name, calories: calories, unit: unit, type: type };
+    const entry = { name, calories, unit, type };
     if (idx >= 0) lib[idx] = entry; else lib.push(entry);
     saveFoodLibrary(lib);
     renderFoodDropdowns();
@@ -105,12 +194,12 @@ function renderProfiles() {
     profiles.forEach((p, i) => {
         const chip = document.createElement('div');
         chip.className = 'profile-chip' + (p.active ? ' active' : '');
-        chip.innerHTML = '<span onclick="loadProfile(' + i + ')">' + (p.name || 'Unnamed') + '</span><span class="delete-btn" onclick="handleDelete(event,' + i + ')">\u2715</span>';
+        chip.innerHTML = '<span onclick="loadProfile(' + i + ')">' + (p.name || 'Unnamed') + '</span><span class="delete-btn" onclick="handleDelete(event,' + i + ')">✕</span>';
         bar.appendChild(chip);
     });
     const btn = document.createElement('button');
     btn.className = 'btn btn-secondary';
-    btn.textContent = '+ New Cat';
+    btn.textContent = t('newCat');
     btn.onclick = newProfile;
     bar.appendChild(btn);
 }
@@ -118,7 +207,7 @@ function renderProfiles() {
 function saveProfile() {
     const profiles = getProfiles();
     const name = $('catName').value.trim() || 'Unnamed';
-    const data = { name: name, weight: $('catWeight').value, lifeStage: currentLifeStage, wetFoodName: $('wetFoodName').value, wetCalories: $('wetCalories').value, wetUnit: currentWetUnit, dryFoodName: $('dryFoodName').value, dryCalories: $('dryCalories').value, dryUnit: currentDryUnit, active: true };
+    const data = { name, weight: $('catWeight').value, lifeStage: currentLifeStage, wetFoodName: $('wetFoodName').value, wetCalories: $('wetCalories').value, wetUnit: currentWetUnit, dryFoodName: $('dryFoodName').value, dryCalories: $('dryCalories').value, dryUnit: currentDryUnit, active: true };
     profiles.forEach(p => p.active = false);
     const idx = profiles.findIndex(p => p.name === name);
     if (idx >= 0) profiles[idx] = data; else profiles.push(data);
@@ -132,7 +221,7 @@ function handleDelete(event, index) {
     if (btn.classList.contains('confirming')) { deleteProfile(index); }
     else {
         btn.classList.add('confirming'); btn.textContent = 'Delete?';
-        const revert = () => { btn.classList.remove('confirming'); btn.textContent = '\u2715'; document.removeEventListener('click', outsideClick); };
+        const revert = () => { btn.classList.remove('confirming'); btn.textContent = '✕'; document.removeEventListener('click', outsideClick); };
         const outsideClick = (e) => { if (e.target !== btn) revert(); };
         setTimeout(() => revert(), 3000);
         setTimeout(() => document.addEventListener('click', outsideClick), 10);
@@ -187,6 +276,9 @@ function newProfile() {
     calculate();
 }
 
+// Init
+document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === (currentLang === 'en' ? 'EN' : '中文')));
+applyI18n();
 renderFoodDropdowns();
 renderProfiles();
 (function() {
