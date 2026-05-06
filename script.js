@@ -126,7 +126,7 @@ function getKcalPerGram(type) {
 function calculate() {
     const weight = parseFloat($('catWeight').value);
     const multiplier = parseFloat(currentLifeStage);
-    const wetRatio = parseInt($('ratioSlider').value) / 100;
+    const wetRatio = (100 - parseInt($('ratioSlider').value)) / 100;
     const dryRatio = 1 - wetRatio;
     $('sliderValue').textContent = t('sliderTpl').replace('{wet}', Math.round(wetRatio*100)).replace('{dry}', Math.round(dryRatio*100));
     if (!weight || weight <= 0) { $('wetGrams').textContent = '\u2014'; $('dryGrams').textContent = '\u2014'; $('calorieInfo').textContent = t('enterWeight'); return; }
